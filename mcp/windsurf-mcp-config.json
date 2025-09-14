@@ -1,0 +1,59 @@
+{
+  "mcpServers": {
+    "kamui-file-upload": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "env": {
+        "KAMUI_BASE_URL": "https://kamui-code.ai"
+      }
+    },
+    "kamui-t2i-flux-schnell": {
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "env": {
+        "KAMUI_BASE_URL": "https://kamui-code.ai",
+        "MCP_SERVER_URL": "https://kamui-code.ai/t2i/fal/flux/schnell"
+      }
+    },
+    "kamui-t2i-imagen3": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"], 
+      "env": {
+        "KAMUI_BASE_URL": "https://kamui-code.ai",
+        "MCP_SERVER_URL": "https://kamui-code.ai/t2i/google/imagen"
+      }
+    },
+    "kamui-i2i-flux-kontext": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "env": {
+        "KAMUI_BASE_URL": "https://kamui-code.ai",
+        "MCP_SERVER_URL": "https://kamui-code.ai/i2i/fal/flux/kontext"
+      }
+    },
+    "kamui-i2i-aura-sr": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "env": {
+        "KAMUI_BASE_URL": "https://kamui-code.ai",
+        "MCP_SERVER_URL": "https://kamui-code.ai/i2i/fal/aura-sr"
+      }
+    },
+    "kamui-t2v-veo3-fast": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "env": {
+        "KAMUI_BASE_URL": "https://kamui-code.ai",
+        "MCP_SERVER_URL": "https://kamui-code.ai/t2v/fal/veo3/fast"
+      }
+    },
+    "kamui-video-analysis": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "env": {
+        "KAMUI_BASE_URL": "https://kamui-code.ai",
+        "MCP_SERVER_URL": "https://kamui-code.ai/video-analysis/google/gemini"
+      }
+    }
+  }
+}

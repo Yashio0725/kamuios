@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mermaid動的テスト</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      background: #0f0f0f;
+      color: #ffffff;
+      padding: 20px;
+    }
+    .mermaid {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    button {
+      background: #4a9eff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mermaid動的レンダリングテスト</h1>
+  
+  <button onclick="addFlowchart()">フローチャートを追加</button>
+  <button onclick="addUserFlowchart()">ユーザーのフローチャートを追加</button>
+  
+  <div id="container"></div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        primaryColor: '#4a9eff',
+        primaryTextColor: '#ffffff',
+        primaryBorderColor: '#2a2a2a',
+        lineColor: '#ffffff',
+        textColor: '#ffffff'
+      }
+    });
+
+    function addFlowchart() {
+      const container = document.getElementById('container');
+      const mermaidDiv = document.createElement('div');
+      mermaidDiv.className = 'mermaid';
+      mermaidDiv.textContent = `
+        graph TD
+          A[開始] --> B[処理]
+          B --> C[終了]
+      `;
+      container.appendChild(mermaidDiv);
+      
+      // 描画実行
+      mermaid.run();
+    }
+
+    function addUserFlowchart() {
+      const container = document.getElementById('container');
+      const mermaidDiv = document.createElement('div');
+      mermaidDiv.className = 'mermaid';
+      mermaidDiv.textContent = `
+        flowchart LR
+          A[Ingestion<br/>API/CSV/手動] --> B[データストア]
+          B --> C[KPI集計]
+          C --> D[Dashboard UI]
+          D --> E[レポート出力]
+          D --> F[投稿カレンダー]
+      `;
+      container.appendChild(mermaidDiv);
+      
+      // 描画実行
+      mermaid.run();
+    }
+  </script>
+</body>
+</html>

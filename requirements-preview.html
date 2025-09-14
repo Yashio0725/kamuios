@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>要件定義書プレビュー</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <style>
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      background: #0f0f0f;
+      color: #ffffff;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 20px;
+      background: #1a1a1a;
+      border-radius: 8px;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: 10px 20px;
+      margin: 5px;
+      background: #2a2a2a;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .tab.active {
+      background: #4a9eff;
+    }
+    .tab:hover {
+      background: #3a3a3a;
+    }
+    .tab.active:hover {
+      background: #4a9eff;
+    }
+    .content {
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: #2a2a2a;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 8px;
+      border-left: 4px solid #4a9eff;
+    }
+    .card h3 {
+      margin-top: 0;
+      color: #4a9eff;
+    }
+    .requirements-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    .requirements-table th,
+    .requirements-table td {
+      border: 1px solid #3a3a3a;
+      padding: 12px;
+      text-align: left;
+    }
+    .requirements-table th {
+      background: #2a2a2a;
+      color: #4a9eff;
+    }
+    .tech-stack {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .tech-category {
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .tech-category h4 {
+      color: #4a9eff;
+      margin-top: 0;
+    }
+    .persona {
+      background: #2a2a2a;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .persona-icon {
+      font-size: 48px;
+      min-width: 60px;
+    }
+    .persona-content h4 {
+      color: #4a9eff;
+      margin-top: 0;
+    }
+    .mermaid {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .hidden {
+      display: none;
+    }
+    .file-input {
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #2a2a2a;
+      border-radius: 8px;
+    }
+    .file-input input {
+      background: #1a1a1a;
+      color: #ffffff;
+      border: 1px solid #3a3a3a;
+      padding: 8px;
+      border-radius: 4px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>要件定義書プレビュー</h1>
+      <div class="file-input">
+        <label for="yamlFile">YAMLファイルを選択:</label>
+        <input type="file" id="yamlFile" accept=".yaml,.yml" />
+      </div>
+    </div>
+
+    <div id="documentContent" class="hidden">
+      <div class="header">
+        <h1 id="docTitle"></h1>
+        <p id="docContent"></p>
+        <div id="headerInfo"></div>
+      </div>
+
+      <div class="tabs" id="tabsContainer"></div>
+
+      <div class="content" id="contentArea">
+        <div id="overviewTab" class="tab-content">
+          <h2>📋 プロジェクト概要</h2>
+          <div id="overviewCards"></div>
+        </div>
+
+        <div id="usersTab" class="tab-content hidden">
+          <h2>👥 ユーザー分析</h2>
+          <div id="userPersonas"></div>
+        </div>
+
+        <div id="requirementsTab" class="tab-content hidden">
+          <h2>📝 要件定義</h2>
+          <h3>機能要件</h3>
+          <div id="functionalRequirements"></div>
+          <h3>非機能要件</h3>
+          <div id="nonFunctionalRequirements"></div>
+        </div>
+
+        <div id="architectureTab" class="tab-content hidden">
+          <h2>🏗️ アーキテクチャ</h2>
+          <div id="architectureDiagram"></div>
+        </div>
+
+        <div id="implementationTab" class="tab-content hidden">
+          <h2>💻 実装</h2>
+          <div id="techStack"></div>
+          <div id="ganttChart"></div>
+        </div>
+
+        <div id="operationsTab" class="tab-content hidden">
+          <h2>⚙️ 運用</h2>
+          <div id="operationsContent"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mermaid初期化
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        primaryColor: '#4a9eff',
+        primaryTextColor: '#ffffff',
+        primaryBorderColor: '#2a2a2a',
+        lineColor: '#ffffff',
+        textColor: '#ffffff',
+        taskTextColor: '#ffffff',
+        taskTextLightColor: '#ffffff',
+        taskFillColor: '#4a9eff',
+        taskBorderColor: '#93c5fd',
+        activeTaskBorderColor: '#93c5fd',
+        activeTaskColor: '#4a9eff',
+        doneTaskColor: '#4a9eff',
+        doneTaskBorderColor: '#93c5fd',
+        critBorderColor: '#93c5fd',
+        critColor: '#4a9eff',
+        todayLineColor: '#93c5fd',
+        gridColor: '#64748b',
+        tertiaryColor: '#2d2d2d',
+        sequenceNumberColor: '#ffffff',
+        signalColor: '#ffffff',
+        actorBorder: '#ffffff',
+        actorTextColor: '#ffffff',
+        noteTextColor: '#ffffff',
+        noteBorderColor: '#cbd5e1',
+        activationTextColor: '#ffffff',
+        edgeLabelBackground: '#0f172a',
+        secondaryColor: '#2d2d2d',
+        background: '#1a1a1a',
+        mainBkg: '#0f0f0f',
+        secondBkg: '#1a1a1a',
+        tertiaryColor: '#2d2d2d'
+      },
+      flowchart: {
+        nodeSpacing: 50,
+        rankSpacing: 50,
+        curve: 'basis'
+      },
+      gantt: {
+        numberSectionStyles: 6,
+        leftPadding: 250,
+        gridLineStartPadding: 350,
+        fontSize: 11,
+        sectionFontSize: 13,
+        fontFamily: '"Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif',
+        barHeight: 20,
+        barGap: 4,
+        topPadding: 60,
+        rightPadding: 200,
+        bottomPadding: 50
+      }
+    });
+
+    let currentData = null;
+
+    // ファイル読み込み
+    document.getElementById('yamlFile').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const yamlContent = e.target.result;
+            const data = jsyaml.load(yamlContent);
+            if (Array.isArray(data) && data.length > 0) {
+              currentData = data[0];
+              renderDocument(currentData);
+            } else {
+              currentData = data;
+              renderDocument(currentData);
+            }
+          } catch (error) {
+            alert('YAMLファイルの解析に失敗しました: ' + error.message);
+          }
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    // ドキュメント描画
+    function renderDocument(data) {
+      document.getElementById('documentContent').classList.remove('hidden');
+      
+      // ヘッダー情報
+      document.getElementById('docTitle').textContent = data.title || 'タイトル未設定';
+      document.getElementById('docContent').textContent = data.content || '';
+      
+      if (data.header_info) {
+        document.getElementById('headerInfo').innerHTML = `
+          <p>バージョン: ${data.header_info.version || 'N/A'} | 
+          作成日: ${data.header_info.date || 'N/A'} | 
+          ステータス: ${data.header_info.status || 'N/A'}</p>
+        `;
+      }
+
+      // タブ生成
+      renderTabs(data.tabs || []);
+      
+      // コンテンツ描画
+      renderOverview(data.overview_cards || []);
+      renderUsers(data.user_personas || []);
+      renderRequirements(data.functional_requirements || [], data.non_functional_requirements || []);
+      renderArchitecture(data.mermaid || '');
+      renderImplementation(data.tech_stack || {}, data.gantt || '');
+    }
+
+    // タブ描画
+    function renderTabs(tabs) {
+      const container = document.getElementById('tabsContainer');
+      container.innerHTML = '';
+      
+      tabs.forEach(tab => {
+        const button = document.createElement('button');
+        button.className = 'tab' + (tab.active ? ' active' : '');
+        button.textContent = `${tab.icon || ''} ${tab.label}`;
+        button.onclick = () => switchTab(tab.id);
+        container.appendChild(button);
+      });
+    }
+
+    // タブ切り替え
+    function switchTab(tabId) {
+      // すべてのタブコンテンツを隠す
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+      });
+      
+      // すべてのタブボタンからactiveクラスを削除
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // 選択されたタブを表示
+      const targetContent = document.getElementById(tabId + 'Tab');
+      if (targetContent) {
+        targetContent.classList.remove('hidden');
+      }
+      
+      // 選択されたタブボタンにactiveクラスを追加
+      event.target.classList.add('active');
+    }
+
+    // 概要描画
+    function renderOverview(cards) {
+      const container = document.getElementById('overviewCards');
+      container.innerHTML = '';
+      
+      cards.forEach(card => {
+        const cardElement = document.createElement('div');
+        cardElement.className = 'card';
+        cardElement.innerHTML = `
+          <h3>${card.icon || ''} ${card.title}</h3>
+          <div>${card.content.replace(/\n/g, '<br>')}</div>
+        `;
+        container.appendChild(cardElement);
+      });
+    }
+
+    // ユーザー分析描画
+    function renderUsers(personas) {
+      const container = document.getElementById('userPersonas');
+      container.innerHTML = '';
+      
+      personas.forEach(persona => {
+        const personaElement = document.createElement('div');
+        personaElement.className = 'persona';
+        personaElement.innerHTML = `
+          <div class="persona-icon">${persona.icon || '👤'}</div>
+          <div class="persona-content">
+            <h4>${persona.name} (${persona.age}歳, ${persona.role})</h4>
+            <p><strong>目標:</strong></p>
+            <ul>${(persona.goals || []).map(goal => `<li>${goal}</li>`).join('')}</ul>
+            <p><strong>課題:</strong></p>
+            <ul>${(persona.pain_points || []).map(point => `<li>${point}</li>`).join('')}</ul>
+            <p><strong>ニーズ:</strong></p>
+            <ul>${(persona.needs || []).map(need => `<li>${need}</li>`).join('')}</ul>
+          </div>
+        `;
+        container.appendChild(personaElement);
+      });
+    }
+
+    // 要件定義描画
+    function renderRequirements(functional, nonFunctional) {
+      // 機能要件
+      const funcContainer = document.getElementById('functionalRequirements');
+      if (functional.length > 0) {
+        const table = document.createElement('table');
+        table.className = 'requirements-table';
+        table.innerHTML = `
+          <thead>
+            <tr><th>ID</th><th>機能名</th><th>説明</th><th>優先度</th></tr>
+          </thead>
+          <tbody>
+            ${functional.map(req => `
+              <tr>
+                <td>${req.id}</td>
+                <td>${req.name}</td>
+                <td>${req.description}</td>
+                <td>${req.priority}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        `;
+        funcContainer.appendChild(table);
+      }
+
+      // 非機能要件
+      const nonFuncContainer = document.getElementById('nonFunctionalRequirements');
+      nonFunctional.forEach(category => {
+        const categoryElement = document.createElement('div');
+        categoryElement.className = 'card';
+        categoryElement.innerHTML = `
+          <h4>${category.category}</h4>
+          <ul>${(category.requirements || []).map(req => `<li>${req}</li>`).join('')}</ul>
+        `;
+        nonFuncContainer.appendChild(categoryElement);
+      });
+    }
+
+    // アーキテクチャ描画
+    function renderArchitecture(mermaidCode) {
+      const container = document.getElementById('architectureDiagram');
+      container.innerHTML = ''; // コンテナをクリア
+      if (mermaidCode) {
+        console.log('Rendering mermaid code:', mermaidCode);
+        const mermaidElement = document.createElement('div');
+        mermaidElement.className = 'mermaid';
+        mermaidElement.textContent = mermaidCode.trim();
+        container.appendChild(mermaidElement);
+        
+        // DOMに追加後、適切な方法で描画
+        setTimeout(async () => {
+          try {
+            // 要素にユニークIDを設定
+            const uniqueId = 'mermaid-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            mermaidElement.id = uniqueId;
+            
+            // Mermaidを描画
+            const { svg } = await mermaid.render(uniqueId + '-svg', mermaidCode.trim());
+            mermaidElement.innerHTML = svg;
+          } catch (error) {
+            console.error('Mermaid render error:', error);
+            mermaidElement.innerHTML = `<p style="color: #ff6b6b;">マーメイド図の描画に失敗しました: ${error.message}</p>`;
+          }
+        }, 300);
+      }
+    }
+
+    // 実装描画
+    function renderImplementation(techStack, ganttCode) {
+      // 技術スタック
+      const techContainer = document.getElementById('techStack');
+      techContainer.innerHTML = '<h3>技術スタック</h3>';
+      const techGrid = document.createElement('div');
+      techGrid.className = 'tech-stack';
+      
+      Object.entries(techStack).forEach(([category, technologies]) => {
+        const categoryElement = document.createElement('div');
+        categoryElement.className = 'tech-category';
+        categoryElement.innerHTML = `
+          <h4>${category}</h4>
+          ${technologies.map(tech => `
+            <p><strong>${tech.name}</strong> ${tech.version || ''}<br>
+            <small>${tech.purpose || ''}</small></p>
+          `).join('')}
+        `;
+        techGrid.appendChild(categoryElement);
+      });
+      techContainer.appendChild(techGrid);
+
+      // ガントチャート
+      const ganttContainer = document.getElementById('ganttChart');
+      if (ganttCode) {
+        ganttContainer.innerHTML = '<h3>開発スケジュール</h3>';
+        const ganttElement = document.createElement('div');
+        ganttElement.className = 'mermaid';
+        ganttElement.textContent = ganttCode.trim();
+        ganttContainer.appendChild(ganttElement);
+        
+        // DOMに追加後、適切な方法で描画
+        setTimeout(async () => {
+          try {
+            // 要素にユニークIDを設定
+            const uniqueId = 'gantt-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            ganttElement.id = uniqueId;
+            
+            // Mermaidを描画
+            const { svg } = await mermaid.render(uniqueId + '-svg', ganttCode.trim());
+            ganttElement.innerHTML = svg;
+          } catch (error) {
+            console.error('Gantt render error:', error);
+            ganttElement.innerHTML = `<p style="color: #ff6b6b;">ガントチャートの描画に失敗しました: ${error.message}</p>`;
+          }
+        }, 300);
+      }
+    }
+  </script>
+</body>
+</html>

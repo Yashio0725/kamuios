@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mermaid テスト</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      background: #0f0f0f;
+      color: #ffffff;
+      padding: 20px;
+    }
+    .mermaid {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mermaid テスト</h1>
+  
+  <h2>テスト1: 基本的なフローチャート</h2>
+  <div class="mermaid">
+    graph TD
+      A[開始] --> B[処理1]
+      B --> C[処理2]
+      C --> D[終了]
+  </div>
+
+  <h2>テスト2: KPIダッシュボード</h2>
+  <div class="mermaid">
+    graph TD
+      A[📊 KPI管理] --> B[👥 ユーザー指標]
+      A --> C[💰 ビジネス指標]
+      A --> D[⚙️ 技術指標]
+      
+      B --> B1[登録ユーザー数<br/>10,000名]
+      B --> B2[アクティブユーザー<br/>月間2,000名]
+      B --> B3[継続率<br/>70%以上]
+      
+      C --> C1[GMV<br/>月間1,000万円]
+      C --> C2[成約率<br/>15%以上]
+      C --> C3[平均案件単価<br/>50万円]
+      
+      D --> D1[システム稼働率<br/>99.9%]
+      D --> D2[レスポンス時間<br/>2秒以内]
+      D --> D3[AI成功率<br/>95%以上]
+      
+      style A fill:#4a9eff
+      style B fill:#10b981
+      style C fill:#f59e0b
+      style D fill:#8b5cf6
+  </div>
+
+  <h2>テスト3: ガントチャート</h2>
+  <div class="mermaid">
+    gantt
+      title プロジェクト開発スケジュール
+      dateFormat YYYY-MM-DD
+      section フェーズ1
+      要件定義 :done, req, 2025-01-01, 14d
+      基本設計 :done, design, after req, 21d
+      section フェーズ2
+      実装 :active, impl, after design, 30d
+      テスト :test, after impl, 14d
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        primaryColor: '#4a9eff',
+        primaryTextColor: '#ffffff',
+        primaryBorderColor: '#2a2a2a',
+        lineColor: '#ffffff',
+        textColor: '#ffffff',
+        taskTextColor: '#ffffff',
+        taskTextLightColor: '#ffffff',
+        taskFillColor: '#4a9eff',
+        taskBorderColor: '#93c5fd',
+        activeTaskBorderColor: '#93c5fd',
+        activeTaskColor: '#4a9eff',
+        doneTaskColor: '#4a9eff',
+        doneTaskBorderColor: '#93c5fd',
+        critBorderColor: '#93c5fd',
+        critColor: '#4a9eff',
+        todayLineColor: '#93c5fd',
+        gridColor: '#64748b',
+        tertiaryColor: '#2d2d2d',
+        sequenceNumberColor: '#ffffff',
+        signalColor: '#ffffff',
+        actorBorder: '#ffffff',
+        actorTextColor: '#ffffff',
+        noteTextColor: '#ffffff',
+        noteBorderColor: '#cbd5e1',
+        activationTextColor: '#ffffff',
+        edgeLabelBackground: '#0f172a',
+        secondaryColor: '#2d2d2d',
+        background: '#1a1a1a',
+        mainBkg: '#0f0f0f',
+        secondBkg: '#1a1a1a',
+        tertiaryColor: '#2d2d2d'
+      },
+      gantt: {
+        numberSectionStyles: 6,
+        leftPadding: 200,
+        gridLineStartPadding: 400,
+        fontSize: 13,
+        sectionFontSize: 15,
+        fontFamily: '"Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif',
+        barHeight: 22,
+        barGap: 6,
+        topPadding: 50,
+        rightPadding: 150
+      }
+    });
+  </script>
+</body>
+</html>
